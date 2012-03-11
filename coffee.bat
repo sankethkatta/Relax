@@ -1,1 +1,0 @@
-node "C:\Program Files (x86)\CoffeeScript\bin\coffee" -w -c %1
