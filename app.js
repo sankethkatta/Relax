@@ -35,8 +35,15 @@ app.configure('production', function(){
 });
 
 // Routes
-
+app.use(express.bodyParser());
 app.get('/', routes.index);
+
+app.post('/journal', function(req, res){
+  console.log(req.body.comment);
+    res.redirect('back');
+	});
+
+
 
 app.listen(1995);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

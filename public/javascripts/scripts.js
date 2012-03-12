@@ -77,9 +77,22 @@
         return $(this).html('How did you feel?');
       }
     });
-    return $("form").submit(function(evnt) {
+	send = function(sendData) {
+		$.ajax({
+			type: "POST",
+			url: "http://localhost:1995/journal",
+			data: sendData,
+			dataType: "text"
+		
+		}); 
+
+	}
+    $("form").submit(function(evnt) {
+	  var journal;
       evnt.preventDefault();
-      return console.log($(this).serialize());
+      journal = $(this).serialize();
+      console.log(journal);
+      send(journal);
     });
   });
 
