@@ -4,7 +4,7 @@
   time = 2;
 
   $(document).ready(function() {
-    var startTimer, startTracking;
+    var send, startTimer, startTracking;
     $('#start').click(function() {
       $('#start').fadeOut(1000);
       $('#timer').delay(1000).fadeIn(1000);
@@ -77,21 +77,18 @@
         return $(this).html('How did you feel?');
       }
     });
-	send = function(sendData) {
-		$.ajax({
-			type: "POST",
-			url: "http://localhost:1995/journal",
-			data: sendData,
-			dataType: "text"
-		
-		}); 
-
-	}
-    $("form").submit(function(evnt) {
-	  var journal;
+    send = function(sendData) {
+      var data, dataType;
+      return $.ajax({
+        type: "POST",
+        url: "http://localhost:1995/journal"
+      }, data = sendData, dataType = "text");
+    };
+    return $("form").submit(function(evnt) {
+      var journal;
       evnt.preventDefault();
       journal = $(this).serialize();
-      send(journal);
+      return send(journal);
     });
   });
 
