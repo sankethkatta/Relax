@@ -91,7 +91,6 @@
 	  var journal;
       evnt.preventDefault();
       journal = $(this).serialize();
-      console.log(journal);
       send(journal);
     });
   });
