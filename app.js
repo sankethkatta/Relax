@@ -51,7 +51,7 @@ app.post('/journal', function(req, res){
 app.post('/login', function(req, res){
 	console.log(req.body.username);
 	console.log(req.body.password);
-	if (req.session.logged) res.send('Welcome back!');
+	if (req.session.logged) res.send(req.session.username);
 	else {
 
 
