@@ -77,18 +77,28 @@
         return $(this).html('How did you feel?');
       }
     });
-    send = function(sendData) {
-      var data, dataType;
+    send = function(sendData, type) {
       return $.ajax({
         type: "POST",
-        url: "http://localhost:1995/journal"
-      }, data = sendData, dataType = "text");
+        url: "http://localhost:1995/" + type,
+        data: sendData,
+        dataType: "text"
+      });
     };
-    return $("form").submit(function(evnt) {
+    $("#journalForm").submit(function(evnt) {
       var journal;
       evnt.preventDefault();
       journal = $(this).serialize();
-      return send(journal);
+      return send(journal, "journal");
+    });
+    $("#login").click(function() {
+      return $("#loginFormWrapper").toggle('slow');
+    });
+    return $("#createLoginForm").submit(function(evnt) {
+      var login;
+      evnt.preventDefault();
+      login = $(this).serialize();
+      return send(login, "createLogin");
     });
   });
 

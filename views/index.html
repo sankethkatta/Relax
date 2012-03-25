@@ -16,7 +16,18 @@
 </head>
 <body>
 <div id="content">
-	<div id="loginWrapper"><div id="login">Login</div></div>
+	<div id="loginWrapper">
+		<div id="login">Login</div>
+	</div>
+	<div id="loginFormWrapper">
+		<div id="loginForm">
+			<form id="createLoginForm">
+				<input id="createUser" type="text" name="username" placeholder="Username" />
+				<input id="createPass" type="password" name="password" placeholder="Password" />
+				<input id="submitCreateLogin" type="submit" value="Login" />
+			</form>
+		</div>
+	</div>
 	<h1>Relax</h1>
 	<h2>For five minutes, just do nothing</h2>
 	<div id="start">Ready?</div>
@@ -24,7 +35,7 @@
 	<div id="progressWrapper"><div id="progress"></div></div>
 	<div id="message"></div>
 	<div id="commentWrapper">
-		<form>
+		<form id="journalForm">
 		<textarea id="comment" class="faded" name="comment">How did you feel?</textarea>
 		<div id="submitWrapper"><input id="submit" type="submit" value="Submit" /></div>
 		</form>

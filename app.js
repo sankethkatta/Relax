@@ -49,8 +49,8 @@ app.post('/journal', function(req, res){
 });
 
 app.post('/login', function(req, res){
-	console.log(req.body.username);
-	console.log(req.body.password);
+	var user = req.body.username
+	,pass = req.body.password+'ILikeTw33d';
 	if (req.session.logged) res.send(req.session.username);
 	else {
 
@@ -61,16 +61,18 @@ app.post('/login', function(req, res){
 app.post('/createLogin', function(req,res){
 	var user = req.body.username
 	, pass = req.body.password
-	, c 
+	, cipher 
 	, epass;
 
-	c = crypto.createCipher('aes192', 'hfZ9GddagMbGANXtwfsJtrjCEMGDcj');
-	epass = c.update(pass, 'binary', 'hex') + c.final('hex');
+	db.get("SELECT user FROM login WHERE user LIKE '"+user+"'", function(err, row) {
+		console.log(row)
+		if (!row) {
+			cipher = crypto.createCipher('aes192', 'hfZ9GddagMbGANXtwfsJtrjCEMGDcj');
+			epass = cipher.update(pass+'ILikeTw33d', 'binary', 'hex') + cipher.final('hex');
 
-
-	db.each('INSERT INTO login values('+user+','+epass+')'), function(err, row) {
-		console.log(row);
-	};
+			db.run("INSERT INTO login values('"+user+"','"+epass+"')");
+		}
+	});
 });
 
 app.listen(1995);

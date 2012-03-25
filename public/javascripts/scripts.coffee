@@ -65,15 +65,23 @@ $(document).ready ->
 			$(@).addClass('faded')
 			$(@).html('How did you feel?')
 	
-	send = (sendData) ->
+	send = (sendData, type) ->
 		$.ajax
 			type: "POST",
-			url: "http://localhost:1995/journal",
-			data = sendData,
-			dataType = "text"
+			url: "http://localhost:1995/#{type}",
+			data:  sendData,
+			dataType:  "text"
 	
-	$("form").submit (evnt) ->
+	$("#journalForm").submit (evnt) ->
 		evnt.preventDefault()
 		journal = $(@).serialize()
-		send(journal)
+		send(journal, "journal")
 	
+	$("#login").click ->
+		$("#loginFormWrapper").toggle('slow')
+		
+	$("#createLoginForm").submit (evnt) ->
+		evnt.preventDefault()
+		login = $(@).serialize()
+		send(login, "createLogin")
+		
