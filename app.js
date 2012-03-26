@@ -42,10 +42,7 @@ app.configure('production', function(){
 // Routes
 app.use(express.bodyParser());
 
-app.get('/', function(req, res) {
-	console.log(req.session);
-	res.render('index.ejs', {user: req.session.username});
-});
+app.get('/', routes.index);
 
 app.post('/journal', function(req, res){
 	console.log(req.body.comment);
