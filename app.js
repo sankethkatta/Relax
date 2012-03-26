@@ -14,7 +14,7 @@ db = new sqlite3.Database('test');
 
 app.configure(function(){
 	app.set('views', __dirname + '/views');
-	app.set('view engine', 'jade');
+	app.set('view engine', 'ejs');
 	app.use(express.bodyParser());
 	app.use(express.methodOverride());
 	app.use(express.cookieParser());  
@@ -41,7 +41,11 @@ app.configure('production', function(){
 
 // Routes
 app.use(express.bodyParser());
-app.get('/', routes.index);
+
+app.get('/', function(req, res) {
+	console.log(req.session);
+	res.render('index.ejs', {user: req.session.username});
+});
 
 app.post('/journal', function(req, res){
 	console.log(req.body.comment);
@@ -59,13 +63,15 @@ app.post('/login', function(req, res){
 });
 
 app.post('/createLogin', function(req,res){
-	var user = req.body.username
+	var user = req.body.username.replace(/ /g,'')
 	, pass = req.body.password
 	, cipher 
 	, epass;
 
+	req.session.username = user; // TO TEST THE SESSION 
+	console.log(req.session);
+
 	db.get("SELECT user FROM login WHERE user LIKE '"+user+"'", function(err, row) {
-		console.log(row)
 		if (!row) {
 			cipher = crypto.createCipher('aes192', 'hfZ9GddagMbGANXtwfsJtrjCEMGDcj');
 			epass = cipher.update(pass+'ILikeTw33d', 'binary', 'hex') + cipher.final('hex');
