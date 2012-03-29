@@ -4,6 +4,6 @@
  */
 
 exports.index =  function(req, res) {
-	console.log(req.session);
+	console.log(req.session.username);
 	res.render('index.ejs', {user: 'sanketh'});
 };
