@@ -65,7 +65,7 @@ app.post('/createLogin', function(req,res){
 	, cipher 
 	, epass;
 
-	//req.session.username = user; // TO TEST THE SESSION 
+	req.session.username = user; // TO TEST THE SESSION 
 	console.log(req.session);
 
 	db.get("SELECT user FROM login WHERE user LIKE '"+user+"'", function(err, row) {
