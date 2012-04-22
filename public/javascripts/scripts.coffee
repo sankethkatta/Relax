@@ -80,8 +80,25 @@ $(document).ready ->
 	$("#login").click ->
 		$("#loginFormWrapper").toggle('slow')
 		
+	$("#register").click ->
+		$("#registerFormWrapper").toggle('slow')
+
+	###$("#registerLoginForm").submit (evnt) ->
+		evnt.preventDefault()
+		login = $(@).serializeArray()
+		if (validate(login) == "ERROR")
+			send(login, "registerLogin")
+		$("#registerUser").val("")
+		$("#registerPass").val("")
+
 	$("#createLoginForm").submit (evnt) ->
 		evnt.preventDefault()
-		login = $(@).serialize()
-		send(login, "createLogin")
-		
+		login = $(@).serializeArray()
+		validate(login)
+		send(login, "login")
+		$("#createUser").val("")
+		$("#createPass").val("")
+    ###	
+	validate = (obj) ->
+		if (obj.username == "" || obj.password == "")
+			return "ERROR"

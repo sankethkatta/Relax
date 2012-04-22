@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
 <head>
-<!-- By Sanketh Katta and Rohit Turumella "Relax" -->
+<!-- By Sanketh Katta "Relax" -->
 	<meta charset="utf-8" />
 	<!-- My Master Stylesheet -->
 	<link rel="Stylesheet" type="text/css" href="/stylesheets/newstyle.css"/>
@@ -15,26 +15,33 @@
 	<title>Just Relax</title>
 </head>
 <body>
-    <% if(!loggedin) { %>
-        <div id="login">
-            <form id="createLoginForm" method="post" action="login">
-                <input id="createUser" type="text" name="username" placeholder="Username" />
-                <input id="createPass" type="password" name="password" placeholder="Password" />
-                <input id="submitCreateLogin" type="submit" value="Login!" />
-            </form>
-            <form id="registerLoginForm" method="post" action="registerLogin">
-                <input id="registerUser" type="text" name="username" placeholder="Username" />
-                <input id="registerPass" type="password" name="password" placeholder="Password" />
-                <input id="submitRegisterLogin" type="submit" value="Create Account" />
-            </form>
-        </div>
-    <% } else { %>
-        <div id="logout">
-
-
-        </div>
-    <% } %>
-	<h3> Welcome <%= user %> </h3>
+<div id="content">
+	<div id="loginWrapper">
+		<div id="login">Login</div>
+	</div>
+	
+	<div id="registerWrapper">
+		<div id="register">Register</div>
+	</div>
+	<div id="loginFormWrapper">
+		<div id="loginForm">
+			<form id="createLoginForm">
+				<input id="createUser" type="text" name="username" placeholder="Username" />
+				<input id="createPass" type="password" name="password" placeholder="Password" />
+				<input id="submitCreateLogin" type="submit" value="Login!" />
+			</form>
+		</div>
+	</div>
+	<div id="registerFormWrapper">
+		<div id="registerForm">
+			<form id="registerLoginForm">
+				<input id="registerUser" type="text" name="username" placeholder="Username" />
+				<input id="registerPass" type="password" name="password" placeholder="Password" />
+				<input id="submitRegisterLogin" type="submit" value="Create Account" />
+			</form>
+		</div>
+	</div>
+	<h3> Welcome Back <%= user %> </h3>
 	<h1>Relax</h1>
 	<h2>For five minutes, just do nothing</h2>
 	<div id="start">Ready?</div>
@@ -47,7 +54,9 @@
 		<div id="submitWrapper"><input id="submit" type="submit" value="Submit" /></div>
 		</form>
 	</div>
+	<div id="submit">
 	<object data="http://www.youtube.com/v/cU1VFErmUGA&autoplay=1" type="application/x-shockwave-flash"></object>
+</div>
 </body>
 </html>
 

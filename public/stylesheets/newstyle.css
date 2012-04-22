@@ -24,58 +24,8 @@ background-image: -webkit-radial-gradient(center, circle cover, #fefdfa 0%, #dfc
 /* Proposed W3C Markup  */
 background-image: radial-gradient(center, circle cover, #fefdfa 0%, #dfcf80 100%);
 	
+
 }
-#login {
-	cursor: pointer;
-	color: #fbfbfb;
-	padding: 5px 15px 5px 15px;
-	font-weight: bold;
-	background-color: #555;
-	text-align: center;
-	float: right;
-	
-	-webkit-border-radius: 0px 0px 2px 2px;
-	-moz-border-radius: 0px 0px 2px 2px;
-	border-radius: 0px 0px 2px 2px;
-
-	-moz-box-shadow: inset 0 0 5px #999;
-	-webkit-box-shadow: inset 0 0 5px #999;
-	box-shadow: inset 0 0 5px #999;
-} 
-#login:active {
-	-moz-box-shadow: inset 0 0 10px #777;
-	-webkit-box-shadow: inset 0 0 10px #777;
-	box-shadow: inset 0 0 10px #777;
-	cursor: pointer;
-}
-
-
-#loginWrapper {
-	width: 100%;
-	height: 35px;
-}
-
-#loginFormWrapper {
-	width: 100%;
-	height: 100px;
-	display: none;
-}
-
-#loginForm {
-	width: 200px;
-	height: 50px;
-	float: right;	
-	margin-bottom: 50px;
-}
-
-#loginForm input {
-	float: right;
-}
-
-#createLoginForm {
-	width: 100%;
-}
-
 h1, h2 {
 	/* color: #333 */
 	margin: 0px;

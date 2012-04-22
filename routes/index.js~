@@ -1,0 +1,14 @@
+
+/*
+ * GET home page.
+ */
+
+exports.index =  function(req, res) {
+	console.log(req.session.username);
+	if(req.session.username === "undefined"){
+		res.render("index.ejs", {user: ""});
+	}
+	else{
+		res.render('index.ejs', {user: "back "+ req.session.username});
+	}
+};

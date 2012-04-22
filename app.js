@@ -42,7 +42,32 @@ app.configure('production', function(){
 // Routes
 app.use(express.bodyParser());
 
-app.get('/', routes.index);
+// Crypto Cipher Helpers
+
+encipher = function(text) {
+    var cipher,
+        epass;
+    cipher = crypto.createCipher('aes192', 'hfZ9GddagMbGANXtwfsJtrjCEMGDcj');
+    epass = cipher.update(text+'ILikeTw33d', 'binary', 'hex') + cipher.final('hex');
+
+    return epass;
+};
+
+//app.get('/', routes.index);
+app.get('/', function(req, res){
+    var decipher,
+    user;
+
+   if (req.cookies.loggedin) {
+        decipher = crypto.createDecipher('aes192', 'authtokensareawesome');
+        user = decipher.update(req.cookies.loggedin, 'hex', 'binary') + decipher.final('binary');
+        user = user.replace(/saltyToken/g,"");
+        
+        res.render("index.ejs", {user: "back " + user, loggedin: true});
+    } else{
+        res.render('index.ejs', {user: "", loggedin: false});
+    }
+});
 
 app.post('/journal', function(req, res){
 	console.log(req.body.comment);
@@ -52,21 +77,15 @@ app.post('/journal', function(req, res){
 app.post('/login', function(req, res){
 	var user = req.body.username
 	,pass = req.body.password+'ILikeTw33d';
-	if (req.session.logged) res.send(req.session.username);
-	else {
-
-
-	}
+	console.log(user+"|"+pass);
 });
 
-app.post('/createLogin', function(req,res){
+app.post('/registerLogin', function(req,res){
 	var user = req.body.username.replace(/ /g,'')
 	, pass = req.body.password
 	, cipher 
-	, epass;
-
-	req.session.username = user; // TO TEST THE SESSION 
-	console.log(req.session);
+	, epass
+    , authToken;
 
 	db.get("SELECT user FROM login WHERE user LIKE '"+user+"'", function(err, row) {
 		if (!row) {
@@ -76,6 +95,13 @@ app.post('/createLogin', function(req,res){
 			db.run("INSERT INTO login values('"+user+"','"+epass+"')");
 		}
 	});
+    
+    console.log(user+" | "+pass);
+
+    cipher = crypto.createCipher('aes192', 'authtokensareawesome');
+    authToken = cipher.update(user+'saltyToken', 'binary', 'hex') + cipher.final('hex');
+    res.cookie('loggedin',authToken, {maxAge: 90000});
+    res.redirect('back');
 });
 
 app.listen(1995);

@@ -4,7 +4,7 @@
   time = 2;
 
   $(document).ready(function() {
-    var send, startTimer, startTracking;
+    var send, startTimer, startTracking, validate;
     $('#start').click(function() {
       $('#start').fadeOut(1000);
       $('#timer').delay(1000).fadeIn(1000);
@@ -94,12 +94,28 @@
     $("#login").click(function() {
       return $("#loginFormWrapper").toggle('slow');
     });
-    return $("#createLoginForm").submit(function(evnt) {
-      var login;
-      evnt.preventDefault();
-      login = $(this).serialize();
-      return send(login, "createLogin");
+    $("#register").click(function() {
+      return $("#registerFormWrapper").toggle('slow');
     });
+    /*$("#registerLoginForm").submit (evnt) ->
+    		evnt.preventDefault()
+    		login = $(@).serializeArray()
+    		if (validate(login) == "ERROR")
+    			send(login, "registerLogin")
+    		$("#registerUser").val("")
+    		$("#registerPass").val("")
+    
+    	$("#createLoginForm").submit (evnt) ->
+    		evnt.preventDefault()
+    		login = $(@).serializeArray()
+    		validate(login)
+    		send(login, "login")
+    		$("#createUser").val("")
+    		$("#createPass").val("")
+    */
+    return validate = function(obj) {
+      if (obj.username === "" || obj.password === "") return "ERROR";
+    };
   });
 
 }).call(this);
