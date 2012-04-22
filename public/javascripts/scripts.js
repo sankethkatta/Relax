@@ -1,7 +1,7 @@
 (function() {
   var time;
 
-  time = 2;
+  time = 300;
 
   $(document).ready(function() {
     var send, startTimer, startTracking, validate;

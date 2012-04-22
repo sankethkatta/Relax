@@ -4,47 +4,60 @@
 <!-- By Sanketh Katta and Rohit Turumella "Relax" -->
 	<meta charset="utf-8" />
 	<!-- My Master Stylesheet -->
-	<link rel="Stylesheet" type="text/css" href="/stylesheets/newstyle.css"/>
+	<link rel="Stylesheet" type="text/css" href="/stylesheets/style.css"/>
+	<link rel="Stylesheet" type="text/css" href="/stylesheets/bootstrap.min.css"/>
 	<!-- jQuery v1.7.1 (minified production version -->
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 	<!-- My Master Scripts file -->
 	<script type="text/javascript" src="/javascripts/scripts.js"></script>
 	<!-- Google Fonts Place Below:-->
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css'>
 	<link rel="shortcut icon" href="favicon.ico" type="image/ico" />
 	<title>Just Relax</title>
 </head>
 <body>
     <% if(!loggedin) { %>
         <div id="login">
-            <form id="createLoginForm" method="post" action="login">
-                <input id="createUser" type="text" name="username" placeholder="Username" />
-                <input id="createPass" type="password" name="password" placeholder="Password" />
-                <input id="submitCreateLogin" type="submit" value="Login!" />
+        <div id="loginWrapper">
+            <form id="loginForm" method="post" action="login">
+                <span>Login:</span>
+                <input id="loginUser" class="loginInputs" type="text" name="username" placeholder="Username" />
+                <input id="loginPass" class="loginInputs" type="password" name="password" placeholder="Password" />
+                <input id="submitCreateLogin" class="btn btn-info" type="submit" value="Login!" />
             </form>
-            <form id="registerLoginForm" method="post" action="registerLogin">
-                <input id="registerUser" type="text" name="username" placeholder="Username" />
-                <input id="registerPass" type="password" name="password" placeholder="Password" />
-                <input id="submitRegisterLogin" type="submit" value="Create Account" />
+            <span id="divider">OR</span>
+            <form id="registerForm" method="post" action="registerLogin">
+                <span>Create Account:</span>
+                <input id="registerUser" class="loginInputs" type="text" name="username" placeholder="Username" />
+                <input id="registerPass" class="loginInputs" type="password" name="password" placeholder="Password" />
+                <input id="submitRegisterLogin" class="btn btn-info" type="submit" value="Create Account" />
             </form>
+        </div>
         </div>
     <% } else { %>
         <div id="logout">
-
-
+            <form id="logout" method="post" action="logout">
+                <input id="submitLogout" type="submit" value="Logout" />
+            </from>
         </div>
     <% } %>
-	<h3> Welcome <%= user %> </h3>
+	<h3> <%= user %> </h3>
 	<h1>Relax</h1>
 	<h2>For five minutes, just do nothing</h2>
-	<div id="start">Ready?</div>
+  <div id="startWrapper">
+      <button id="start" class="btn btn-inverse disabled">Ready?</button>
+  </div>
+      <span id="loginMessage">Login or Create Account Above!</span>
 	<div id="timer">5:00</div>
-	<div id="progressWrapper"><div id="progress"></div></div>
+	<div id="progressWrapper" class="progress progress-striped active"><div id="progress" class="bar"></div></div>
 	<div id="message"></div>
 	<div id="commentWrapper">
-		<form id="journalForm">
-		<textarea id="comment" class="faded" name="comment">How did you feel?</textarea>
-		<div id="submitWrapper"><input id="submit" type="submit" value="Submit" /></div>
+		<form id="journalForm" method="post" action="journal">
+        <textarea id="comment" class="faded" name="comment">How did you feel?</textarea>
+        <div id="submitJournalWrapper">
+            <input id="submitJournal" class="btn btn-inverse" type="submit" value="Submit" />
+        </div>
 		</form>
 	</div>
 	<object data="http://www.youtube.com/v/cU1VFErmUGA&autoplay=1" type="application/x-shockwave-flash"></object>
