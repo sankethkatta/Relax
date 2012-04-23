@@ -67,11 +67,14 @@
         </div>
         </div>
     <% } else { %>
-        <div id="logout">
-          <h3 id="welcomeMessage"> <%= user %> </h3>
+       <div id="navBar">
             <form id="logoutForm" method="post" action="logout">
-                <input id="submitLogout" class="btn btn-warning" type="submit" value="Logout" />
+                <i class="icon-remove-sign icon-white"></i><input id="submitLogout" class="btn btn-warning" type="submit" value="Logout">
             </form>
+            <form id="viewJournalForm" method="get" action="journal">
+                <i class="icon-list-alt icon-white"></i><input id="viewJournal" class="btn btn-success" type="submit" value="View Journal">
+            </form>
+          <div id="myUser" class="btn btn-primary disabled"><i class="icon-user icon-white"></i> <%= user %> </div>
         </div>
     <% } %>
   <h1>Relax</h1>

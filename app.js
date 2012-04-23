@@ -74,7 +74,7 @@ app.get('/', function(req, res){
       db.get("SELECT * FROM login WHERE user LIKE '"+user+"'", function(err, row) {
           if(row) {
             rend.loggedin = true;
-            rend.user = "Welcome " + user + "!";
+            rend.user = user;
             res.render("index.ejs", rend);
           } else {
             rend.loggedin = false; 
@@ -104,7 +104,6 @@ app.post('/login', function(req, res){
   var user = req.body.username
   , pass = req.body.password
   , authToken;
-  console.log(user+"|"+pass);
 
   db.get("SELECT * FROM login WHERE user LIKE '"+user+"'", function(err, row) {
     if (!row) {
@@ -114,7 +113,7 @@ app.post('/login', function(req, res){
       epass = encrypt(pass);
       if (row.pass == epass) {
           authToken = encrypt(user);
-          res.cookie('loggedin', authToken, {maxAge: 300000});
+          res.cookie('loggedin', authToken, {maxAge: 604800000});
           rend.errorLogin = false;
           res.redirect('back');
       } else {
@@ -138,7 +137,7 @@ app.post('/registerLogin', function(req,res){
         
         authToken = encrypt(user);
         rend.errorRegister = false;
-        res.cookie('loggedin',authToken, {maxAge: 300000});
+        res.cookie('loggedin',authToken, {maxAge: 604800000});
         res.redirect('back');
     } else {
       rend.errorRegister = true;
@@ -146,7 +145,6 @@ app.post('/registerLogin', function(req,res){
     }
   });
     
-    console.log(user+" | "+pass);
 
 });
 
