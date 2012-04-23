@@ -58,20 +58,35 @@ decrypt = function(input) {
       decrypText;
     decipher = crypto.createDecipher('aes192', 'hfZ9GddagMbGANXtwfsJtrjCEMGDcj');
     decrypText = decipher.update(input, 'hex', 'binary') + decipher.final('binary');
-    decrypText = decrypText.replace(/salt/g,"");
-
+    decrypText = decrypText.replace(salt,"");
     return decrypText;
 };
 //app.get('/', routes.index);
+
+// Render Object
+var rend = {user: "", loggedin: false, errorLogin: false, errorRegister: false}; 
+
 app.get('/', function(req, res){
-    var decipher,
-    user;
+   var decipher;
 
    if (req.cookies.loggedin) {
-      decipher = decrypt(req.cookies.loggedin);
-      res.render("index.ejs", {user: "Welcome back " + user, loggedin: true});
-    } else{
-      res.render('index.ejs', {user: "", loggedin: false});
+      user = decrypt(req.cookies.loggedin);
+      db.get("SELECT * FROM login WHERE user LIKE '"+user+"'", function(err, row) {
+          if(row) {
+            rend.loggedin = true;
+            rend.user = "Welcome " + user + "!";
+            res.render("index.ejs", rend);
+          } else {
+            rend.loggedin = false; 
+            res.clearCookie('loggedin');
+            res.redirect('back');
+          }
+      });
+    } else {
+      rend.loggedin = false;
+      res.render('index.ejs', rend);
+      rend.errorLogin = false;
+      rend.errorRegister = false;
     }
 });
 
@@ -87,19 +102,24 @@ app.post('/logout', function(req, res) {
 
 app.post('/login', function(req, res){
   var user = req.body.username
-  ,pass = req.body.password;
+  , pass = req.body.password
+  , authToken;
   console.log(user+"|"+pass);
 
   db.get("SELECT * FROM login WHERE user LIKE '"+user+"'", function(err, row) {
     if (!row) {
-      res.send("USER NOT FOUND");
+      rend.errorLogin = true;
+      res.redirect('back');
     } else {
       epass = encrypt(pass);
       if (row.pass == epass) {
-          res.cookie('loggedin',authToken, {maxAge: 90000});
-          redirect('back');
+          authToken = encrypt(user);
+          res.cookie('loggedin', authToken, {maxAge: 300000});
+          rend.errorLogin = false;
+          res.redirect('back');
       } else {
-          res.send("PASSWORD INCORRECT");
+          rend.errorLogin = true;
+          res.redirect('back');
       }
     }
   });
@@ -113,17 +133,22 @@ app.post('/registerLogin', function(req,res){
 
   db.get("SELECT user FROM login WHERE user LIKE '"+user+"'", function(err, row) {
     if (!row) {
-            epass = encrypt(pass);
-      db.run("INSERT INTO login values('"+user+"','"+epass+"')");
+        epass = encrypt(pass);
+        db.run("INSERT INTO login values('"+user+"','"+epass+"')");
+        
+        authToken = encrypt(user);
+        rend.errorRegister = false;
+        res.cookie('loggedin',authToken, {maxAge: 300000});
+        res.redirect('back');
+    } else {
+      rend.errorRegister = true;
+      res.redirect('back');
     }
   });
     
     console.log(user+" | "+pass);
 
-    authToken = encrypt(user);
-    res.cookie('loggedin',authToken, {maxAge: 90000});
-    res.redirect('back');
 });
 
-app.listen(1995);
+app.listen(80);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

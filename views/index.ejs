@@ -18,49 +18,78 @@
 </head>
 <body>
     <% if(!loggedin) { %>
+        <div id="cover">
         <div id="login">
+        <h1 id="frontHeader">Welcome!</h1>
         <div id="loginWrapper">
+        <% if(errorLogin) { %>
+            <form id="loginForm" method="post" action="login">
+                <span>Login:</span>
+                <div class="control-group error">
+                  <label class="control-label">INCORRECT LOGIN</label>
+                    <div class="controls">
+                        <input id="loginUser" class="loginInputs errorBorder" type="text" name="username" placeholder="Username" />
+                        <input id="loginPass" class="loginInputs errorBorder" type="password" name="password" placeholder="Password" />
+                    </div>
+                </div>
+                <input id="submitCreateLogin" class="btn btn-info" type="submit" value="Login!" />
+            </form>
+        <% } else { %>
             <form id="loginForm" method="post" action="login">
                 <span>Login:</span>
                 <input id="loginUser" class="loginInputs" type="text" name="username" placeholder="Username" />
                 <input id="loginPass" class="loginInputs" type="password" name="password" placeholder="Password" />
                 <input id="submitCreateLogin" class="btn btn-info" type="submit" value="Login!" />
             </form>
-            <span id="divider">OR</span>
+        <% } %>    
+        <span id="divider">OR</span>
+        <% if(errorRegister) { %>
+            <form id="registerForm" method="post" action="registerLogin">
+                <span>Create Account:</span>
+                <div class="control-group error">
+                  <label class="control-label">PICK A DIFFERENT USERNAME</label>
+                    <div class="controls">
+                        <input id="registerUser" class="loginInputs errorBorder" type="text" name="username" placeholder="Username" />
+                        <input id="registerPass" class="loginInputs errorBorder" type="password" name="password" placeholder="Password" />
+                    </div>
+                </div>
+                <input id="submitRegisterLogin" class="btn btn-info" type="submit" value="Create Account" />
+            </form>
+        <% } else { %>
             <form id="registerForm" method="post" action="registerLogin">
                 <span>Create Account:</span>
                 <input id="registerUser" class="loginInputs" type="text" name="username" placeholder="Username" />
                 <input id="registerPass" class="loginInputs" type="password" name="password" placeholder="Password" />
                 <input id="submitRegisterLogin" class="btn btn-info" type="submit" value="Create Account" />
             </form>
+        <% } %>
+        </div>
         </div>
         </div>
     <% } else { %>
         <div id="logout">
-            <form id="logout" method="post" action="logout">
-                <input id="submitLogout" type="submit" value="Logout" />
-            </from>
+          <h3 id="welcomeMessage"> <%= user %> </h3>
+            <form id="logoutForm" method="post" action="logout">
+                <input id="submitLogout" class="btn btn-warning" type="submit" value="Logout" />
+            </form>
         </div>
     <% } %>
-	<h3> <%= user %> </h3>
-	<h1>Relax</h1>
-	<h2>For five minutes, just do nothing</h2>
+  <h1>Relax</h1>
+  <h2>For five minutes, just do nothing</h2>
   <div id="startWrapper">
-      <button id="start" class="btn btn-inverse disabled">Ready?</button>
+      <button id="start" class="btn btn-inverse">Ready?</button>
   </div>
-      <span id="loginMessage">Login or Create Account Above!</span>
-	<div id="timer">5:00</div>
-	<div id="progressWrapper" class="progress progress-striped active"><div id="progress" class="bar"></div></div>
-	<div id="message"></div>
-	<div id="commentWrapper">
-		<form id="journalForm" method="post" action="journal">
+  <div id="timer">5:00</div>
+  <div id="progressWrapper" class="progress progress-striped active"><div id="progress" class="bar"></div></div>
+  <div id="message"></div>
+  <div id="commentWrapper">
+    <form id="journalForm" method="post" action="journal">
         <textarea id="comment" class="faded" name="comment">How did you feel?</textarea>
         <div id="submitJournalWrapper">
             <input id="submitJournal" class="btn btn-inverse" type="submit" value="Submit" />
         </div>
-		</form>
-	</div>
-	<object data="http://www.youtube.com/v/cU1VFErmUGA&autoplay=1" type="application/x-shockwave-flash"></object>
+    </form>
+  <object data="http://www.youtube.com/v/cU1VFErmUGA&autoplay=1" type="application/x-shockwave-flash"></object>
 </body>
 </html>
 

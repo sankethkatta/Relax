@@ -11,7 +11,6 @@ html, body {
 h1, h2 {
 	/* color: #333 */
 	margin: 0px;
-	header: 0px;
 	text-align: center;
 	cursor: default;
 	color: #E45B3C;
@@ -27,9 +26,42 @@ h2 {
 
 }
 
+#cover {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: rgba(34,34,34,.6);
+  background: -moz-radial-gradient(center, ellipse cover,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.01) 1%, rgba(50,50,50,0.65) 99%, rgba(51,51,51,0.65) 100%); /* FF3.6+ */
+
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(0,0,0,0)), color-stop(1%,rgba(0,0,0,0.01)), color-stop(99%,rgba(50,50,50,0.65)), color-stop(100%,rgba(51,51,51,0.65))); /* Chrome,Safari4+ */
+
+  background: -webkit-radial-gradient(center, ellipse cover,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.01) 1%,rgba(50,50,50,0.65) 99%,rgba(51,51,51,0.65) 100%); /* Chrome10+,Safari5.1+ */
+
+  background: -o-radial-gradient(center, ellipse cover,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.01) 1%,rgba(50,50,50,0.65) 99%,rgba(51,51,51,0.65) 100%); /* Opera 12+ */
+
+  background: -ms-radial-gradient(center, ellipse cover,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.01) 1%,rgba(50,50,50,0.65) 99%,rgba(51,51,51,0.65) 100%); /* IE10+ */
+
+  background: radial-gradient(center, ellipse cover,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.01) 1%,rgba(50,50,50,0.65) 99%,rgba(51,51,51,0.65) 100%); /* W3C */
+
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#a6333333',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
+  
+}
+
+#frontHeader {
+  font-size: 50px;
+  line-height: .7;
+  margin-bottom: 20px;
+}
+
 #login {
   background: url("/images/black-Linen.png") repeat;
-  padding: 20px;
+  padding: 25px;
+  position: relative;
+  top: 200px;
+  -moz-box-shadow:    0px 0px 50px 35px #777;
+  -webkit-box-shadow: 0px 0px 50px 35px #777;
+  box-shadow:         0px 0px 50px 35px #777;
 }
 
 #login form input {
@@ -51,15 +83,18 @@ h2 {
 
 #loginWrapper {
   width: 550px;
-  height: 125px;;
+  height: 150px;;
   margin: 0 auto;
 }
 
 .loginInputs {
   width: 200px;
   margin: 10px 0px 10px 0px;;
-  border: 0px;
   padding-left: 5px;
+}
+
+.errorBorder {
+  border-width: 3px;
 }
 
 #loginForm , #registerForm {
@@ -71,11 +106,33 @@ h2 {
   float: right;
 }
 
-#content {
-	width: 70%;
-	margin: 0 auto;
-	height: 100%;	
+#logout {
+  height: 20px;
+  padding: 5px 20px 15px 20px;
+  margin-bottom: 15px;
+  background-color: #fbfbfb;
+  -moz-box-shadow:    0px 4px 10px 2px #777;
+  -webkit-box-shadow: 0px 4px 10px 2px #777;
+  box-shadow:         0px 0px 10px 2px #777;
 }
+
+#logoutForm {
+  float: right;
+}
+
+#logoutForm input {
+  font-weight: bold;
+}
+
+#welcomeMessage {
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  color: #333;
+  height: 30px;
+  float: left;
+}
+
 
 #timer {
 	margin: 50px 0px 0px 0px;
@@ -154,9 +211,5 @@ object {
   height: 50px;
 }
 
-#loginMessage {
-  display: block;
-  text-align: center;
-  font-family: Permanent Marker;
-  font-size: 30px;
-}
+
+
