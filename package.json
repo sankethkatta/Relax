@@ -4,6 +4,7 @@
   , "private": true
   , "dependencies": {
       "express": "2.5.8"
-    , "ejs": ">= 0.0.1"
+    , "ejs": ">= "1.0"
+    , "sqlite3">= "2.1.3"
   }
 }

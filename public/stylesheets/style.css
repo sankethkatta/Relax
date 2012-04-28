@@ -218,5 +218,15 @@ object {
   height: 50px;
 }
 
+#journalBackWrapper{
+  width: 110px;
+  margin: 60px auto 60px auto;
+}
 
+#journalBack {
+  padding: 15px;
+  font-weight: bold;
+  font-size: 125%;
+  text-decoration: none;
+}
 

@@ -64,58 +64,66 @@ decrypt = function(input) {
 //app.get('/', routes.index);
 
 // Render Object
-var rend = {user: "", loggedin: false, errorLogin: false, errorRegister: false}; 
+var relaxinfo = {user: "", loggedin: false, errorLogin: false, errorRegister: false, relaxinfo: false}; 
 
 app.get('/', function(req, res){
    var decipher;
-   if (req.cookies.loggedin) {
-      user = decrypt(req.cookies.loggedin);
+   if (req.cookies.relaxinfo) {
+      relaxinfo = JSON.parse(decrypt(req.cookies.relaxinfo))
+      user = relaxinfo.user 
       db.get("SELECT * FROM login WHERE user LIKE '"+user+"'", function(err, row) {
           if(row) {
-            rend.loggedin = true;
-            rend.user = user;
-            res.render("index.ejs", rend);
+            relaxinfo.loggedin = true;
+            relaxinfo.user = user;
+            res.cookie('relaxinfo', encrypt(JSON.stringify(relaxinfo)), {maxAge: 604800000});
+            res.render("index.ejs", relaxinfo);
           } else {
-            rend.loggedin = false; 
-            res.clearCookie('loggedin');
+            relaxinfo.loggedin = false; 
+            res.clearCookie('relaxinfo');
             res.redirect('back');
           }
       });
     } else {
-      rend.loggedin = false;
-      res.render('index.ejs', rend);
-      //rend.errorLogin = false;
-      //rend.errorRegister = false;
+      relaxinfo.loggedin = false;
+      relaxinfo.user = "";
+      res.render('index.ejs', relaxinfo);
+      relaxinfo.errorLogin = false;
+      relaxinfo.errorRegister = false;
     }
 });
 
 app.post('/journal', function(req, res){
+  relaxinfo = JSON.parse(decrypt(req.cookies.relaxinfo))
   console.log(req.body.comment);
-  res.redirect('back');
-  var journalEntry = req.body.journal,
-    user = req.body.username;
+  var journalEntry = req.body.comment,
+    user = relaxinfo.user 
   if(journalEntry === ""){
-    rend.errorJournal = true;
+    relaxinfo.errorJournal = true;
+    res.cookie('relaxinfo', encrypt(JSON.stringify(relaxinfo)), {maxAge: 604800000});
     res.redirect('back');
-  } 
-  else {
+  } else {
     db.run("INSERT INTO journal values('"+user+"', DATETIME(), '"+journalEntry+"')");
+    res.redirect('/journal');
   }
 });
 
 app.get('/journal', function(req,res){
-  var user = rend.user;
-  db.each("SELECT * FROM journal WHERE user LIKE '"+user+"'", function(err, row){
-    var timeEntry = row.time;
-    var journalText = row.journal;
-    console.log(timeEntry);
-    console.log(journalText)
-    res.send(timeEntry+journalText);
+  relaxinfo = JSON.parse(decrypt(req.cookies.relaxinfo))
+  var user = relaxinfo.user;
+  var rendJournal = {entries: [], times: []};
+  db.each("SELECT * FROM journal WHERE user LIKE '"+user+"' ORDER BY time ", function(err, row){
+    rendJournal.entries.push(row.journal);
+    rendJournal.times.push(row.time);
+    
+    console.log(rendJournal.entries);
+    console.log(rendJournal.times);
+  }, function() {
+  res.render('journal.ejs', rendJournal); 
   });
 });
 
 app.post('/logout', function(req, res) {
-  res.clearCookie('loggedin');
+  res.clearCookie('relaxinfo');
   res.redirect('back');
 });
 
@@ -126,18 +134,19 @@ app.post('/login', function(req, res){
 
   db.get("SELECT * FROM login WHERE user LIKE '"+user+"'", function(err, row) {
     if (!row) {
-      rend.errorLogin = true;
+      relaxinfo.errorLogin = true;
+      res.cookie('relaxinfo', encrypt(JSON.stringify(relaxinfo)), {maxAge: 604800000});
       res.redirect('back');
     } else {
       epass = encrypt(pass);
       if (row.pass == epass) {
-          authToken = encrypt(user);
-          res.cookie('loggedin', authToken, {maxAge: 604800000});
-          res.cookie('object', JSON.stringify(rend), {maxAge: 604800000});
-          rend.errorLogin = false;
+          relaxinfo.user = user;
+          relaxinfo.errorLogin = false;
+          res.cookie('relaxinfo', encrypt(JSON.stringify(relaxinfo)), {maxAge: 604800000});
           res.redirect('back');
       } else {
-          rend.errorLogin = true;
+          relaxinfo.errorLogin = true;
+          res.cookie('relaxinfo', encrypt(JSON.stringify(relaxinfo)), {maxAge: 604800000});
           res.redirect('back');
       }
     }
@@ -150,7 +159,8 @@ app.post('/registerLogin', function(req,res){
     , epass
     , authToken;
   if(user === "" || pass === ""){
-    rend.errorRegister = true;
+    relaxinfo.errorRegister = true;
+    res.cookie('relaxinfo', encrypt(JSON.stringify(relaxinfo)), {maxAge: 604800000});
     res.redirect('back');
   }
   else{
@@ -159,18 +169,17 @@ app.post('/registerLogin', function(req,res){
          epass = encrypt(pass);
          db.run("INSERT INTO login values('"+user+"','"+epass+"')");
         
-         authToken = encrypt(user);
-          rend.errorRegister = false;
-         res.cookie('loggedin',authToken, {maxAge: 604800000});
+         relaxinfo.user = encrypt(user);
+         relaxinfo.errorRegister = false;
+         res.cookie('relaxinfo', encrypt(JSON.stringify(relaxinfo)), {maxAge: 604800000});
          res.redirect('back');
      } else {
-        rend.errorRegister = true;
+       relaxinfo.errorRegister = true;
+       res.cookie('relaxinfo', encrypt(JSON.stringify(relaxinfo)), {maxAge: 604800000});
        res.redirect('back');
      }
     });
   }
-    
-
 });
 
 app.listen(80);
