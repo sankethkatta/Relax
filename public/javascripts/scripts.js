@@ -1,7 +1,7 @@
 (function() {
   var time;
 
-  time = 300;
+  time = 2;
 
   $(document).ready(function() {
     var send, startTimer, startTracking, validate;
@@ -85,34 +85,6 @@
         dataType: "text"
       });
     };
-    $("#journalForm").submit(function(evnt) {
-      var journal;
-      evnt.preventDefault();
-      journal = $(this).serialize();
-      return send(journal, "journal");
-    });
-    $("#login").click(function() {
-      return $("#loginFormWrapper").toggle('slow');
-    });
-    $("#register").click(function() {
-      return $("#registerFormWrapper").toggle('slow');
-    });
-    /*$("#registerLoginForm").submit (evnt) ->
-    		evnt.preventDefault()
-    		login = $(@).serializeArray()
-    		if (validate(login) == "ERROR")
-    			send(login, "registerLogin")
-    		$("#registerUser").val("")
-    		$("#registerPass").val("")
-    
-    	$("#createLoginForm").submit (evnt) ->
-    		evnt.preventDefault()
-    		login = $(@).serializeArray()
-    		validate(login)
-    		send(login, "login")
-    		$("#createUser").val("")
-    		$("#createPass").val("")
-    */
     return validate = function(obj) {
       if (obj.username === "" || obj.password === "") return "ERROR";
     };

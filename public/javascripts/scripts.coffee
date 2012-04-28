@@ -1,4 +1,4 @@
-time = 300 #seconds
+time = 2 #seconds
 $(document).ready ->
 
 	$('#start').click ->
@@ -72,33 +72,6 @@ $(document).ready ->
 			data:  sendData,
 			dataType:  "text"
 	
-	$("#journalForm").submit (evnt) ->
-		evnt.preventDefault()
-		journal = $(@).serialize()
-		send(journal, "journal")
-	
-	$("#login").click ->
-		$("#loginFormWrapper").toggle('slow')
-		
-	$("#register").click ->
-		$("#registerFormWrapper").toggle('slow')
-
-	###$("#registerLoginForm").submit (evnt) ->
-		evnt.preventDefault()
-		login = $(@).serializeArray()
-		if (validate(login) == "ERROR")
-			send(login, "registerLogin")
-		$("#registerUser").val("")
-		$("#registerPass").val("")
-
-	$("#createLoginForm").submit (evnt) ->
-		evnt.preventDefault()
-		login = $(@).serializeArray()
-		validate(login)
-		send(login, "login")
-		$("#createUser").val("")
-		$("#createPass").val("")
-    ###	
 	validate = (obj) ->
 		if (obj.username == "" || obj.password == "")
 			return "ERROR"

@@ -43,7 +43,7 @@ app.configure('production', function(){
 app.use(express.bodyParser());
 
 // Crypto Cipher Helpers
-var salt = 'ILikeTw33d'
+var salt = 'ILikeTw33d';
 encrypt = function(input) {
     var cipher,
         encrypInput;
@@ -68,7 +68,6 @@ var rend = {user: "", loggedin: false, errorLogin: false, errorRegister: false};
 
 app.get('/', function(req, res){
    var decipher;
-
    if (req.cookies.loggedin) {
       user = decrypt(req.cookies.loggedin);
       db.get("SELECT * FROM login WHERE user LIKE '"+user+"'", function(err, row) {
@@ -85,14 +84,34 @@ app.get('/', function(req, res){
     } else {
       rend.loggedin = false;
       res.render('index.ejs', rend);
-      rend.errorLogin = false;
-      rend.errorRegister = false;
+      //rend.errorLogin = false;
+      //rend.errorRegister = false;
     }
 });
 
 app.post('/journal', function(req, res){
   console.log(req.body.comment);
   res.redirect('back');
+  var journalEntry = req.body.journal,
+    user = req.body.username;
+  if(journalEntry === ""){
+    rend.errorJournal = true;
+    res.redirect('back');
+  } 
+  else {
+    db.run("INSERT INTO journal values('"+user+"', DATETIME(), '"+journalEntry+"')");
+  }
+});
+
+app.get('/journal', function(req,res){
+  var user = rend.user;
+  db.each("SELECT * FROM journal WHERE user LIKE '"+user+"'", function(err, row){
+    var timeEntry = row.time;
+    var journalText = row.journal;
+    console.log(timeEntry);
+    console.log(journalText)
+    res.send(timeEntry+journalText);
+  });
 });
 
 app.post('/logout', function(req, res) {
@@ -114,6 +133,7 @@ app.post('/login', function(req, res){
       if (row.pass == epass) {
           authToken = encrypt(user);
           res.cookie('loggedin', authToken, {maxAge: 604800000});
+          res.cookie('object', JSON.stringify(rend), {maxAge: 604800000});
           rend.errorLogin = false;
           res.redirect('back');
       } else {
@@ -129,21 +149,26 @@ app.post('/registerLogin', function(req,res){
     , pass = req.body.password
     , epass
     , authToken;
-
-  db.get("SELECT user FROM login WHERE user LIKE '"+user+"'", function(err, row) {
-    if (!row) {
-        epass = encrypt(pass);
-        db.run("INSERT INTO login values('"+user+"','"+epass+"')");
+  if(user === "" || pass === ""){
+    rend.errorRegister = true;
+    res.redirect('back');
+  }
+  else{
+    db.get("SELECT user FROM login WHERE user LIKE '"+user+"'", function(err, row) {
+      if (!row) {
+         epass = encrypt(pass);
+         db.run("INSERT INTO login values('"+user+"','"+epass+"')");
         
-        authToken = encrypt(user);
-        rend.errorRegister = false;
-        res.cookie('loggedin',authToken, {maxAge: 604800000});
-        res.redirect('back');
-    } else {
-      rend.errorRegister = true;
-      res.redirect('back');
-    }
-  });
+         authToken = encrypt(user);
+          rend.errorRegister = false;
+         res.cookie('loggedin',authToken, {maxAge: 604800000});
+         res.redirect('back');
+     } else {
+        rend.errorRegister = true;
+       res.redirect('back');
+     }
+    });
+  }
     
 
 });
