@@ -94,7 +94,6 @@ app.get('/', function(req, res){
 
 app.post('/journal', function(req, res){
   relaxinfo = JSON.parse(decrypt(req.cookies.relaxinfo))
-  console.log(req.body.comment);
   var journalEntry = req.body.comment,
     user = relaxinfo.user 
   if(journalEntry === ""){
@@ -115,8 +114,6 @@ app.get('/journal', function(req,res){
     rendJournal.entries.push(row.journal);
     rendJournal.times.push(row.time);
     
-    console.log(rendJournal.entries);
-    console.log(rendJournal.times);
   }, function() {
   res.render('journal.ejs', rendJournal); 
   });
@@ -182,5 +179,5 @@ app.post('/registerLogin', function(req,res){
   }
 });
 
-app.listen(80);
+app.listen(5000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

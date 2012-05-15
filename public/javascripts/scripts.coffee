@@ -1,4 +1,4 @@
-time = 2 #seconds
+time = 300 #seconds
 $(document).ready ->
 
 	$('#start').click ->
