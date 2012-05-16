@@ -5,10 +5,16 @@
 var express = require('express')
 , routes = require('./routes')
 , crypto = require('crypto')
-, sqlite3 = require('sqlite3').verbose();
+, pg = require('pg')
 
 var app = module.exports = express.createServer();
-db = new sqlite3.Database('test');
+
+// Postgres Connection
+var conString = "postgres://postgres:SqlSonic@localhost:5432/postgres";
+var client = new pg.Client(conString);
+//client.on('drain', client.end.bind(client)); //disconnect client when all queries are finished
+client.connect();
+    
 
 // Configuration
 
@@ -71,8 +77,8 @@ app.get('/', function(req, res){
    if (req.cookies.relaxinfo) {
       relaxinfo = JSON.parse(decrypt(req.cookies.relaxinfo))
       user = relaxinfo.user 
-      db.get("SELECT * FROM login WHERE user LIKE '"+user+"'", function(err, row) {
-          if(row) {
+      var query = client.query("SELECT * FROM login WHERE username LIKE '"+user+"'", function(err, result) {
+          if(result.rows[0]) {
             relaxinfo.loggedin = true;
             relaxinfo.user = user;
             res.cookie('relaxinfo', encrypt(JSON.stringify(relaxinfo)), {maxAge: 604800000});
@@ -101,7 +107,7 @@ app.post('/journal', function(req, res){
     res.cookie('relaxinfo', encrypt(JSON.stringify(relaxinfo)), {maxAge: 604800000});
     res.redirect('back');
   } else {
-    db.run("INSERT INTO journal values('"+user+"', DATETIME(), '"+journalEntry+"')");
+    var query = client.query("INSERT INTO journal values('"+user+"', CURRENT_TIMESTAMP, '"+journalEntry+"')");
     res.redirect('/journal');
   }
 });
@@ -110,12 +116,12 @@ app.get('/journal', function(req,res){
   relaxinfo = JSON.parse(decrypt(req.cookies.relaxinfo))
   var user = relaxinfo.user;
   var rendJournal = {entries: [], times: []};
-  db.each("SELECT * FROM journal WHERE user LIKE '"+user+"' ORDER BY time ", function(err, row){
-    rendJournal.entries.push(row.journal);
-    rendJournal.times.push(row.time);
-    
-  }, function() {
-  res.render('journal.ejs', rendJournal); 
+  var query = client.query("SELECT * FROM journal WHERE username LIKE '"+user+"' ORDER BY entrytime ", function(err, result) {
+    for (i = 0; i < result.rows.length; i++) {
+      rendJournal.entries.push(result.rows[i].entry);
+      rendJournal.times.push(result.rows[i].entrytime);
+    }
+    res.render('journal.ejs', rendJournal); 
   });
 });
 
@@ -129,14 +135,14 @@ app.post('/login', function(req, res){
   , pass = req.body.password
   , authToken;
 
-  db.get("SELECT * FROM login WHERE user LIKE '"+user+"'", function(err, row) {
-    if (!row) {
+  client.query("SELECT * FROM login WHERE username LIKE '"+user+"'", function(err, result) {
+    if (!result.rows[0]) {
       relaxinfo.errorLogin = true;
       res.cookie('relaxinfo', encrypt(JSON.stringify(relaxinfo)), {maxAge: 604800000});
       res.redirect('back');
     } else {
       epass = encrypt(pass);
-      if (row.pass == epass) {
+      if (result.rows[0].password === epass) {
           relaxinfo.user = user;
           relaxinfo.errorLogin = false;
           res.cookie('relaxinfo', encrypt(JSON.stringify(relaxinfo)), {maxAge: 604800000});
@@ -161,12 +167,12 @@ app.post('/registerLogin', function(req,res){
     res.redirect('back');
   }
   else{
-    db.get("SELECT user FROM login WHERE user LIKE '"+user+"'", function(err, row) {
-      if (!row) {
+    var query = client.query("SELECT username FROM login WHERE username LIKE '"+user+"'", function(err, result) {
+      if (!result.rows[0]) {
          epass = encrypt(pass);
-         db.run("INSERT INTO login values('"+user+"','"+epass+"')");
+         client.query("INSERT INTO login values('"+user+"','"+epass+"')");
         
-         relaxinfo.user = encrypt(user);
+         relaxinfo.user = user;
          relaxinfo.errorRegister = false;
          res.cookie('relaxinfo', encrypt(JSON.stringify(relaxinfo)), {maxAge: 604800000});
          res.redirect('back');
