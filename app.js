@@ -11,8 +11,8 @@ var app = module.exports = express.createServer();
 
 // Postgres Connection
 //var conString = "postgres://postgres:SqlSonic@localhost:5432/postgres";
-var conString = "postgres://nymhzejuph:G-MfDHoX96yQR4LN6AbE@ec2-23-23-203-225.compute-1.amazonaws.com/nymhzejuph"
-var client = new pg.Client(conString);
+//var conString = "postgres://nymhzejuph:G-MfDHoX96yQR4LN6AbE@ec2-23-23-203-225.compute-1.amazonaws.com/nymhzejuph"
+var client = new pg.Client(process.env.DATABASE_URL);
 //client.on('drain', client.end.bind(client)); //disconnect client when all queries are finished
 client.connect();
     
