@@ -16,10 +16,10 @@ var client = new pg.Client(process.env.DATABASE_URL);
 //client.on('drain', client.end.bind(client)); //disconnect client when all queries are finished
 client.connect();
     
-// Creating Postgres tables
+/* Creating Postgres tables
  client.query("CREATE TABLE login (username varchar(100), password varchar(1000))");
  client.query("CREATE TABLE journal (username varchar(100), entrytime timestamp, entry varchar(1000))");
-
+*/
 // Configuration
 
 app.configure(function(){
